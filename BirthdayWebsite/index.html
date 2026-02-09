@@ -2,148 +2,105 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Happy Birthday!</title>
+<title>Happy Birthday 🎉</title>
 
 <style>
   body {
     margin: 0;
-    padding: 0;
+    height: 100vh;
+    background: linear-gradient(120deg, #ff9a9e, #fad0c4);
+    display: flex;
+    justify-content: center;
+    align-items: center;
     font-family: Arial, sans-serif;
-    background: linear-gradient(135deg, #ff9a9e, #fad0c4);
-    color: #fff;
+    overflow: hidden;
+  }
+
+  .card {
+    background: white;
+    padding: 40px;
+    border-radius: 20px;
     text-align: center;
-    overflow-x: hidden;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+    animation: fadeIn 2s ease;
   }
 
   h1 {
-    font-size: 50px;
-    margin-top: 30px;
-    animation: pulse 1.5s infinite;
+    font-size: 48px;
+    animation: bounce 2s infinite;
   }
 
-  @keyframes pulse {
-    0% { transform: scale(1); }
-    50% { transform: scale(1.1); }
-    100% { transform: scale(1); }
-  }
-
-  #moments {
-    margin: 20px auto;
-    max-width: 600px;
+  p {
     font-size: 22px;
-    background: rgba(0,0,0,0.3);
-    padding: 20px;
+    margin-top: 10px;
+    animation: slideUp 2s ease;
+  }
+
+  img {
+    width: 220px;
     border-radius: 15px;
+    margin-top: 20px;
+    animation: zoomIn 2s ease;
   }
 
-  #gallery {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
-    gap: 15px;
-    margin: 20px auto;
+  /* Animations */
+  @keyframes fadeIn {
+    from { opacity: 0; transform: scale(0.8); }
+    to { opacity: 1; transform: scale(1); }
   }
 
-  .photo {
-    width: 200px;
-    height: 200px;
-    object-fit: cover;
-    border-radius: 15px;
-    box-shadow: 0 5px 15px rgba(0,0,0,0.3);
-    cursor: pointer;
-    transition: transform 0.3s;
+  @keyframes bounce {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-15px); }
   }
 
-  .photo:hover {
-    transform: scale(1.1);
+  @keyframes slideUp {
+    from { opacity: 0; transform: translateY(40px); }
+    to { opacity: 1; transform: translateY(0); }
   }
 
-  button {
-    padding: 15px 30px;
-    font-size: 20px;
-    border: none;
-    border-radius: 10px;
-    background-color: #ff6f91;
-    color: white;
-    cursor: pointer;
-    transition: 0.3s;
-    margin: 20px;
+  @keyframes zoomIn {
+    from { transform: scale(0); }
+    to { transform: scale(1); }
   }
 
-  button:hover {
-    background-color: #ff3c6e;
-  }
-
-  /* Confetti */
-  .confetti {
+  /* Floating balloons */
+  .balloon {
     position: absolute;
-    width: 10px;
-    height: 10px;
-    background: #fff;
-    opacity: 0.7;
-    z-index: 9999;
-    pointer-events: none;
+    bottom: -100px;
+    width: 40px;
+    height: 60px;
+    background: red;
+    border-radius: 50%;
+    animation: float 8s infinite;
+  }
+
+  .balloon:nth-child(1) { left: 10%; background: #ff4d4d; animation-delay: 0s; }
+  .balloon:nth-child(2) { left: 30%; background: #ffd700; animation-delay: 2s; }
+  .balloon:nth-child(3) { left: 50%; background: #4da6ff; animation-delay: 4s; }
+  .balloon:nth-child(4) { left: 70%; background: #ff66cc; animation-delay: 1s; }
+  .balloon:nth-child(5) { left: 90%; background: #66ff66; animation-delay: 3s; }
+
+  @keyframes float {
+    from { transform: translateY(0); }
+    to { transform: translateY(-110vh); }
   }
 </style>
 </head>
+
 <body>
 
-<h1>🎉 Happy Birthday! 🎉</h1>
-
-<div id="moments">Wishing you happiness, laughter, and love today and always! 💖</div>
-
-<div id="gallery">
-  <img src="photo1.jpg" class="photo" alt="Memory 1">
-  <img src="photo2.jpg" class="photo" alt="Memory 2">
-  <img src="photo3.jpg" class="photo" alt="Memory 3">
+<div class="card">
+  <h1>🎂 Happy Birthday 🎂</h1>
+  <p>May your day be filled with love, joy & success 💖</p>
+  <img src="https://images.unsplash.com/photo-1527529482837-4698179dc6ce" alt="Birthday">
 </div>
 
-<button onclick="nextMoment()">Next Moment</button>
-
-<!-- Optional: remove if you don't have music -->
-<!--
-<audio id="birthdayMusic" loop autoplay>
-  <source src="happy-birthday.mp3" type="audio/mpeg">
-</audio>
--->
-
-<script>
-  // Moments array
-  const moments = [
-    "Remember our first trip together? 🚗💨",
-    "Your smile brightens everyone's day! 😄",
-    "Happy memories and laughter, today and always! 🎂",
-    "You are amazing, keep shining! ✨"
-  ];
-
-  let index = 0;
-  function nextMoment() {
-    index = (index + 1) % moments.length;
-    document.getElementById('moments').innerText = moments[index];
-  }
-
-  // Confetti effect
-  function createConfetti() {
-    const confetti = document.createElement('div');
-    confetti.classList.add('confetti');
-    confetti.style.left = Math.random() * window.innerWidth + 'px';
-    confetti.style.background = `hsl(${Math.random() * 360}, 100%, 70%)`;
-    document.body.appendChild(confetti);
-
-    let top = 0;
-    const fall = setInterval(() => {
-      top += Math.random() * 5 + 2;
-      confetti.style.top = top + 'px';
-      if (top > window.innerHeight) {
-        confetti.remove();
-        clearInterval(fall);
-      }
-    }, 20);
-  }
-
-  setInterval(createConfetti, 100);
-</script>
+<div class="balloon"></div>
+<div class="balloon"></div>
+<div class="balloon"></div>
+<div class="balloon"></div>
+<div class="balloon"></div>
 
 </body>
 </html>
