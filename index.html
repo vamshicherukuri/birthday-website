@@ -2,100 +2,218 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<title>Happy Birthday 🎉</title>
+<title>Happy Birthday ❤️</title>
 
 <style>
-body {
+html, body {
   margin: 0;
-  height: 100vh;
-  background: linear-gradient(120deg, #ff9a9e, #fad0c4);
+  padding: 0;
+  height: 100%;
+  background: black;
+  overflow: hidden;
+  font-family: 'Segoe UI', sans-serif;
+}
+
+canvas {
+  position: fixed;
+  top: 0;
+  left: 0;
+}
+
+/* Tap Screen */
+.tap-screen {
+  position: fixed;
+  inset: 0;
+  background: radial-gradient(circle, #140016, #000);
   display: flex;
   justify-content: center;
   align-items: center;
-  font-family: Arial, sans-serif;
-  overflow: hidden;
+  z-index: 10;
+  cursor: pointer;
 }
 
-/* Floating balloons */
-.balloon {
-  position: absolute;
-  width: 60px;
-  height: 80px;
-  border-radius: 50%;
-  animation: float 6s infinite ease-in-out;
+.tap-text {
+  color: #ffb6c1;
+  font-size: 2.3em;
+  animation: pulse 1.8s infinite;
 }
 
-.balloon::after {
-  content: '';
+@keyframes pulse {
+  0% { transform: scale(1); opacity: 0.6; }
+  50% { transform: scale(1.12); opacity: 1; }
+  100% { transform: scale(1); opacity: 0.6; }
+}
+
+/* Candle Glow */
+.glow {
+  position: fixed;
+  inset: 0;
+  background: radial-gradient(circle at center, rgba(255,120,120,0.15), transparent 60%);
+  opacity: 0;
+  transition: opacity 2s ease;
+  pointer-events: none;
+  z-index: 1;
+}
+
+/* Message */
+.message {
   position: absolute;
-  width: 2px;
-  height: 40px;
-  background: #555;
+  top: 50%;
   left: 50%;
-  top: 80px;
-}
-
-@keyframes float {
-  0% { transform: translateY(100vh); }
-  100% { transform: translateY(-200px); }
-}
-
-.card {
-  background: #fff;
-  padding: 30px;
-  border-radius: 20px;
+  transform: translate(-50%, -50%);
   text-align: center;
-  max-width: 350px;
-  box-shadow: 0 15px 30px rgba(0,0,0,0.2);
-  animation: pop 1s ease;
+  color: white;
+  z-index: 2;
+  opacity: 0;
+  transition: opacity 2.5s ease;
 }
 
-@keyframes pop {
-  0% { transform: scale(0); }
-  100% { transform: scale(1); }
+.message.show {
+  opacity: 1;
 }
 
-h1 {
+.message h1 {
+  font-size: 3em;
   margin: 0;
-  color: #ff4081;
+  animation: glowText 2s infinite alternate;
 }
 
-p {
-  color: #444;
-  margin: 15px 0;
+.message h2 {
+  font-size: 2em;
+  margin: 12px 0;
+  color: #ff6fae;
 }
 
-img {
-  width: 100%;
-  border-radius: 15px;
-  margin-top: 15px;
-  animation: zoom 3s infinite alternate;
+.message p {
+  font-size: 1.15em;
+  line-height: 1.6;
+  margin-bottom: 20px;
+  color: #f5f5f5;
 }
 
-@keyframes zoom {
-  from { transform: scale(1); }
-  to { transform: scale(1.05); }
+@keyframes glowText {
+  from { text-shadow: 0 0 10px #ff4d6d; }
+  to { text-shadow: 0 0 28px #ff99ac; }
 }
 </style>
 </head>
 
 <body>
 
-<!-- Balloons -->
-<div class="balloon" style="left:10%; background:red;"></div>
-<div class="balloon" style="left:30%; background:yellow; animation-delay:1s;"></div>
-<div class="balloon" style="left:50%; background:blue; animation-delay:2s;"></div>
-<div class="balloon" style="left:70%; background:purple; animation-delay:3s;"></div>
-<div class="balloon" style="left:90%; background:orange; animation-delay:4s;"></div>
-
-<!-- Birthday Card -->
-<div class="card">
-  <h1>🎉 Happy Birthday 🎂</h1>
-  <p>May your day be filled with love, joy & success 💖</p>
-
-  <!-- CHANGE PHOTO NAME HERE -->
-  <img src="photo1.jpg" alt="Birthday Memory">
+<!-- Tap Screen -->
+<div class="tap-screen" id="tapScreen">
+  <div class="tap-text">Tap here ✨</div>
 </div>
+
+<div class="glow" id="glow"></div>
+
+<canvas id="fireworks"></canvas>
+
+<div class="message" id="message">
+  <p>
+    Some feelings don’t need words,<br>
+    they softly light the heart,<br>
+    just like this moment 💫
+  </p>
+  <h1>🎉 Happy Birthday Dear 🎉</h1>
+  <h2>Love you ❤️</h2>
+</div>
+
+<script>
+const tapScreen = document.getElementById("tapScreen");
+const message = document.getElementById("message");
+const glow = document.getElementById("glow");
+
+/* Tap to start */
+tapScreen.addEventListener("click", () => {
+  tapScreen.style.display = "none";
+  message.classList.add("show");
+  glow.style.opacity = "1";
+  startFireworks();
+});
+
+/* Fireworks */
+const canvas = document.getElementById("fireworks");
+const ctx = canvas.getContext("2d");
+canvas.width = innerWidth;
+canvas.height = innerHeight;
+
+window.onresize = () => {
+  canvas.width = innerWidth;
+  canvas.height = innerHeight;
+};
+
+let hearts = [];
+
+function random(min, max) {
+  return Math.random() * (max - min) + min;
+}
+
+class HeartFirework {
+  constructor() {
+    this.x = random(150, canvas.width - 150);
+    this.y = canvas.height;
+    this.color = `hsl(${random(330,360)},100%,65%)`;
+    this.particles = [];
+    this.exploded = false;
+    this.targetY = random(150, canvas.height / 2);
+  }
+
+  update() {
+    if (!this.exploded) {
+      this.y -= 4;
+      if (this.y <= this.targetY) {
+        this.exploded = true;
+        for (let a = 0; a < Math.PI * 2; a += 0.15) {
+          const x = 16 * Math.pow(Math.sin(a), 3);
+          const y = -(13 * Math.cos(a) - 5 * Math.cos(2*a) - 2 * Math.cos(3*a) - Math.cos(4*a));
+          this.particles.push({
+            x: this.x,
+            y: this.y,
+            vx: x * 0.15,
+            vy: y * 0.15,
+            life: 80
+          });
+        }
+      }
+    }
+  }
+
+  draw() {
+    if (!this.exploded) {
+      ctx.fillStyle = this.color;
+      ctx.fillRect(this.x, this.y, 3, 3);
+    } else {
+      this.particles.forEach(p => {
+        ctx.fillStyle = this.color;
+        ctx.fillRect(p.x, p.y, 2, 2);
+        p.x += p.vx;
+        p.y += p.vy;
+        p.life--;
+      });
+      this.particles = this.particles.filter(p => p.life > 0);
+    }
+  }
+}
+
+function startFireworks() {
+  function animate() {
+    ctx.fillStyle = "rgba(0,0,0,0.2)";
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+    if (Math.random() < 0.04) hearts.push(new HeartFirework());
+
+    hearts.forEach((h, i) => {
+      h.update();
+      h.draw();
+      if (h.exploded && h.particles.length === 0) hearts.splice(i, 1);
+    });
+
+    requestAnimationFrame(animate);
+  }
+  animate();
+}
+</script>
 
 </body>
 </html>
