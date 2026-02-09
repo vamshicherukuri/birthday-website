@@ -5,105 +5,97 @@
 <title>Happy Birthday 🎉</title>
 
 <style>
-  body {
-    <h1 style="color:red;">FORCE UPDATE TEST</h1>
-    margin: 0;
-    height: 100vh;
-    background: linear-gradient(120deg, #ff9a9e, #fad0c4);
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    font-family: Arial, sans-serif;
-    overflow: hidden;
-  }
+body {
+  margin: 0;
+  height: 100vh;
+  background: linear-gradient(120deg, #ff9a9e, #fad0c4);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-family: Arial, sans-serif;
+  overflow: hidden;
+}
 
-  .card {
-    background: white;
-    padding: 40px;
-    border-radius: 20px;
-    text-align: center;
-    box-shadow: 0 10px 30px rgba(0,0,0,0.2);
-    animation: fadeIn 2s ease;
-  }
+/* Floating balloons */
+.balloon {
+  position: absolute;
+  width: 60px;
+  height: 80px;
+  border-radius: 50%;
+  animation: float 6s infinite ease-in-out;
+}
 
-  h1 {
-    font-size: 48px;
-    animation: bounce 2s infinite;
-  }
+.balloon::after {
+  content: '';
+  position: absolute;
+  width: 2px;
+  height: 40px;
+  background: #555;
+  left: 50%;
+  top: 80px;
+}
 
-  p {
-    font-size: 22px;
-    margin-top: 10px;
-    animation: slideUp 2s ease;
-  }
+@keyframes float {
+  0% { transform: translateY(100vh); }
+  100% { transform: translateY(-200px); }
+}
 
-  img {
-    width: 220px;
-    border-radius: 15px;
-    margin-top: 20px;
-    animation: zoomIn 2s ease;
-  }
+.card {
+  background: #fff;
+  padding: 30px;
+  border-radius: 20px;
+  text-align: center;
+  max-width: 350px;
+  box-shadow: 0 15px 30px rgba(0,0,0,0.2);
+  animation: pop 1s ease;
+}
 
-  /* Animations */
-  @keyframes fadeIn {
-    from { opacity: 0; transform: scale(0.8); }
-    to { opacity: 1; transform: scale(1); }
-  }
+@keyframes pop {
+  0% { transform: scale(0); }
+  100% { transform: scale(1); }
+}
 
-  @keyframes bounce {
-    0%, 100% { transform: translateY(0); }
-    50% { transform: translateY(-15px); }
-  }
+h1 {
+  margin: 0;
+  color: #ff4081;
+}
 
-  @keyframes slideUp {
-    from { opacity: 0; transform: translateY(40px); }
-    to { opacity: 1; transform: translateY(0); }
-  }
+p {
+  color: #444;
+  margin: 15px 0;
+}
 
-  @keyframes zoomIn {
-    from { transform: scale(0); }
-    to { transform: scale(1); }
-  }
+img {
+  width: 100%;
+  border-radius: 15px;
+  margin-top: 15px;
+  animation: zoom 3s infinite alternate;
+}
 
-  /* Floating balloons */
-  .balloon {
-    position: absolute;
-    bottom: -100px;
-    width: 40px;
-    height: 60px;
-    background: red;
-    border-radius: 50%;
-    animation: float 8s infinite;
-  }
-
-  .balloon:nth-child(1) { left: 10%; background: #ff4d4d; animation-delay: 0s; }
-  .balloon:nth-child(2) { left: 30%; background: #ffd700; animation-delay: 2s; }
-  .balloon:nth-child(3) { left: 50%; background: #4da6ff; animation-delay: 4s; }
-  .balloon:nth-child(4) { left: 70%; background: #ff66cc; animation-delay: 1s; }
-  .balloon:nth-child(5) { left: 90%; background: #66ff66; animation-delay: 3s; }
-
-  @keyframes float {
-    from { transform: translateY(0); }
-    to { transform: translateY(-110vh); }
-  }
+@keyframes zoom {
+  from { transform: scale(1); }
+  to { transform: scale(1.05); }
+}
 </style>
 </head>
 
 <body>
 
-<div class="card">
-  <h1>TEST UPDATE</h1>
-  <p>May your day be filled with love, joy & success 💖</p>
-  <img src="https://images.unsplash.com/photo-1527529482837-4698179dc6ce" alt="Birthday">
-</div>
+<!-- Balloons -->
+<div class="balloon" style="left:10%; background:red;"></div>
+<div class="balloon" style="left:30%; background:yellow; animation-delay:1s;"></div>
+<div class="balloon" style="left:50%; background:blue; animation-delay:2s;"></div>
+<div class="balloon" style="left:70%; background:purple; animation-delay:3s;"></div>
+<div class="balloon" style="left:90%; background:orange; animation-delay:4s;"></div>
 
-<div class="balloon"></div>
-<div class="balloon"></div>
-<div class="balloon"></div>
-<div class="balloon"></div>
-<div class="balloon"></div>
+<!-- Birthday Card -->
+<div class="card">
+  <h1>🎉 Happy Birthday 🎂</h1>
+  <p>May your day be filled with love, joy & success 💖</p>
+
+  <!-- CHANGE PHOTO NAME HERE -->
+  <img src="photo1.jpg" alt="Birthday Memory">
+</div>
 
 </body>
 </html>
-
-
